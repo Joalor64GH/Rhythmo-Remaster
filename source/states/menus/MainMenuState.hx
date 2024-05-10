@@ -1,7 +1,6 @@
 package states.menus;
 
 import base.CoolUtil;
-import base.dependency.Discord;
 import base.dependency.MusicBeat.MusicBeatState;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -44,10 +43,6 @@ class MainMenuState extends MusicBeatState
 
 		// make sure the music is playing
 		CoolUtil.resetMenuMusic();
-
-		#if DISCORD_RPC
-		Discord.changePresence('MENU SCREEN', 'Main Menu');
-		#end
 
 		// uh
 		persistentUpdate = persistentDraw = true;

@@ -2,7 +2,6 @@ package;
 
 import base.*;
 import base.ForeverDependencies;
-import base.dependency.Discord;
 import base.dependency.Overlay;
 import flixel.FlxBasic;
 import flixel.FlxG;
@@ -25,9 +24,6 @@ import sys.FileSystem;
 import sys.io.File;
 import sys.io.Process;
 
-// Here we actually import the states and metadata, and just the metadata.
-// It's nice to have modularity so that we don't have ALL elements loaded at the same time.
-// at least that's how I think it works. I could be stupid!
 class Main extends Sprite
 {
 	// class action variables
@@ -41,17 +37,8 @@ class Main extends Sprite
 
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
-	var infoCounter:Overlay; // initialize the heads up display that shows information before creating it.
+	var infoCounter:Overlay;
 
-	// heres gameweeks set up!
-
-	/**
-		Small bit of documentation here, gameweeks are what control everything in my engine
-		this system will eventually be overhauled in favor of using actual week folders within the 
-		assets.
-		Enough of that, here's how it works
-		[ [songs to use], [characters in songs], [color of week], name of week ]
-	**/
 	public static var gameWeeks:Array<Dynamic> = [
 		[
 			['Tutorial'],
@@ -81,44 +68,56 @@ class Main extends Sprite
 			note studders and shit its weird.
 		**/
 
-		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onCrash);
+		#if desktop
+		openfl.Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, (e:UncaughtErrorEvent) -> 
+		{
+			var errMsg:String = "";
+			var path:String;
+			var callStack:Array<StackItem> = CallStack.exceptionStack(true);
+			var dateNow:String = Date.now().toString();
+
+			dateNow = dateNow.replace(" ", "_");
+			dateNow = dateNow.replace(":", "'");
+
+			path = "./crash/" + "game_" + dateNow + ".txt";
+
+			for (stackItem in callStack)
+			{
+				switch (stackItem)
+				{
+					case FilePos(s, file, line, column):
+						errMsg += file + " (line " + line + ")\n";
+					default:
+						Sys.println(stackItem);
+				}
+			}
+
+			errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/Joalor64GH/Rhythmo\n\n> Crash Handler written by: sqirra-rng";
+
+			if (!FileSystem.exists("./crash/"))
+				FileSystem.createDirectory("./crash/");
+
+			File.saveContent(path, errMsg + "\n");
+
+			Sys.println(errMsg);
+			Sys.println("Crash dump saved in " + Path.normalize(path));
+
+			lime.app.Application.current.window.alert(errMsg, "Error!");
+			Sys.exit(1);
+		});
+		#end
 
 		#if (html5 || neko)
 		framerate = 60;
 		#end
 
-		// simply said, a state is like the 'surface' area of the window where everything is drawn.
-		// if you've used gamemaker you'll probably understand the term surface better
-		// this defines the surface bounds
-
-		var stageWidth:Int = Lib.current.stage.stageWidth;
-		var stageHeight:Int = Lib.current.stage.stageHeight;
-
-		if (zoom == -1)
-		{
-			var ratioX:Float = stageWidth / gameWidth;
-			var ratioY:Float = stageHeight / gameHeight;
-			zoom = Math.min(ratioX, ratioY);
-			gameWidth = Math.ceil(stageWidth / zoom);
-			gameHeight = Math.ceil(stageHeight / zoom);
-			// this just kind of sets up the camera zoom in accordance to the surface width and camera zoom.
-			// if set to negative one, it is done so automatically, which is the default.
-		}
-
 		FlxTransitionableState.skipNextTransIn = true;
 
 		ScriptHandler.initialize();
 
-		// here we set up the base game
 		var gameCreate:FlxGame;
-		gameCreate = new FlxGame(gameWidth, gameHeight, mainClassState, #if (flixel < "5.0.0") zoom, #end framerate, framerate, skipSplash);
-		addChild(gameCreate); // and create it afterwards
-
-		// begin the discord rich presence
-		#if DISCORD_RPC
-		Discord.initializeRPC();
-		Discord.changePresence('');
-		#end
+		gameCreate = new FlxGame(gameWidth, gameHeight, mainClassState, framerate, framerate, skipSplash);
+		addChild(gameCreate);
 
 		infoCounter = new Overlay(0, 0);
 		addChild(infoCounter);
@@ -129,9 +128,6 @@ class Main extends Sprite
 		return input * (60 / FlxG.drawFramerate);
 	}
 
-	/*  This is used to switch "rooms," to put it basically. Imagine you are in the main menu, and press the freeplay button.
-		That would change the game's main class to freeplay, as it is the active class at the moment.
-	 */
 	public static var lastState:FlxState;
 
 	public static function switchState(curState:FlxState, target:FlxState)
@@ -148,7 +144,6 @@ class Main extends Sprite
 			return trace('changed state');
 		}
 		FlxTransitionableState.skipNextTransIn = false;
-		// load the state
 		FlxG.switchState(target);
 	}
 
@@ -165,58 +160,5 @@ class Main extends Sprite
 			FlxG.drawFramerate = newFramerate;
 			FlxG.updateFramerate = newFramerate;
 		}
-	}
-
-	function onCrash(e:UncaughtErrorEvent):Void
-	{
-		var errMsg:String = "";
-		var path:String;
-		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
-		var dateNow:String = Date.now().toString();
-
-		dateNow = StringTools.replace(dateNow, " ", "_");
-		dateNow = StringTools.replace(dateNow, ":", "'");
-
-		path = "crash/" + "FE_" + dateNow + ".txt";
-
-		for (stackItem in callStack)
-		{
-			switch (stackItem)
-			{
-				case FilePos(s, file, line, column):
-					errMsg += file + " (line " + line + ")\n";
-				default:
-					Sys.println(stackItem);
-			}
-		}
-
-		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/Yoshubs/Forever-Engine";
-
-		if (!FileSystem.exists("crash/"))
-			FileSystem.createDirectory("crash/");
-
-		File.saveContent(path, errMsg + "\n");
-
-		Sys.println(errMsg);
-		Sys.println("Crash dump saved in " + Path.normalize(path));
-
-		var crashDialoguePath:String = "FE-CrashDialog";
-
-		#if windows
-		crashDialoguePath += ".exe";
-		#end
-
-		if (FileSystem.exists(crashDialoguePath))
-		{
-			Sys.println("Found crash dialog: " + crashDialoguePath);
-			new Process(crashDialoguePath, [path]);
-		}
-		else
-		{
-			Sys.println("No crash dialog found! Making a simple alert instead...");
-			Application.current.window.alert(errMsg, "Error!");
-		}
-
-		Sys.exit(1);
 	}
 }

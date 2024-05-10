@@ -3,7 +3,6 @@ package states.menus;
 import base.*;
 import base.Conductor.Highscore;
 import base.Song.SwagSong;
-import base.dependency.Discord;
 import base.dependency.MusicBeat.MusicBeatState;
 import base.font.Alphabet;
 import flash.text.TextField;
@@ -97,13 +96,6 @@ class FreeplayState extends MusicBeatState
 				}
 			}
 		}
-
-		// LOAD MUSIC
-		// CoolUtil.resetMenuMusic();
-
-		#if DISCORD_RPC
-		Discord.changePresence('FREEPLAY MENU', 'Main Menu');
-		#end
 
 		// LOAD CHARACTERS
 		bg = new FlxSprite().loadGraphic(Paths.image('menus/base/menuDesat'));

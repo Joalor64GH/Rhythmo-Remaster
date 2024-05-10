@@ -1,7 +1,6 @@
 package states.menus;
 
 import base.ForeverDependencies.ForeverSprite;
-import base.dependency.Discord;
 import base.dependency.MusicBeat.MusicBeatState;
 import base.dependency.MusicBeat;
 import base.font.Alphabet;
@@ -35,20 +34,6 @@ class OptionsMenuState extends MusicBeatState
 	override public function create():Void
 	{
 		super.create();
-
-		// define the categories
-		/* 
-			To explain how these will work, each main category is just any group of options, the options in the category are defined
-			by the first array. The second array value defines what that option does.
-			These arrays are within other arrays for information storing purposes, don't worry about that too much.
-			If you plug in a value, the script will run when the option is hovered over.
-		 */
-
-		// NOTE : Make sure to check Init.hx if you are trying to add options.
-
-		#if DISCORD_RPC
-		Discord.changePresence('OPTIONS MENU', 'Main Menu');
-		#end
 
 		categoryMap = [
 			'main' => [

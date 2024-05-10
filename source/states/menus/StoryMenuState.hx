@@ -2,7 +2,6 @@ package states.menus;
 
 import base.*;
 import base.Conductor.Highscore;
-import base.dependency.Discord;
 import base.dependency.MusicBeat.MusicBeatState;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -58,10 +57,6 @@ class StoryMenuState extends MusicBeatState
 
 		transIn = FlxTransitionableState.defaultTransIn;
 		transOut = FlxTransitionableState.defaultTransOut;
-
-		#if DISCORD_RPC
-		Discord.changePresence('STORY MENU', 'Main Menu');
-		#end
 
 		// freeaaaky
 		CoolUtil.resetMenuMusic();

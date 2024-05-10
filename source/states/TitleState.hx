@@ -3,7 +3,6 @@ package states;
 import base.CoolUtil;
 import base.Conductor;
 import states.menus.MainMenuState;
-import base.dependency.Discord;
 import base.font.Alphabet;
 import base.dependency.MusicBeat.MusicBeatState;
 import flixel.FlxG;
@@ -64,11 +63,6 @@ class TitleState extends MusicBeatState
 	{
 		if (!initialized)
 		{
-			///*
-			#if DISCORD_RPC
-			Discord.changePresence('TITLE SCREEN', 'Main Menu');
-			#end
-
 			CoolUtil.resetMenuMusic(true);
 		}
 

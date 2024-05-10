@@ -49,10 +49,6 @@ import sys.io.File;
 
 using StringTools;
 
-#if desktop
-import base.dependency.Discord;
-#end
-
 class PlayState extends MusicBeatState
 {
 	public static var startTimer:FlxTimer;
@@ -581,10 +577,6 @@ class PlayState extends MusicBeatState
 
 				openSubState(new states.subState.GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 				FlxG.sound.play(AssetManager.getAsset('fnf_loss_sfx', SOUND, 'sounds/${PlayState.assetModifier}'));
-
-				#if DISCORD_RPC
-				Discord.changePresence("Game Over - " + songDetails, detailsSub, iconRPC);
-				#end
 			}
 
 			// spawn in the notes from the array
@@ -990,9 +982,6 @@ class PlayState extends MusicBeatState
 
 	public function pauseGame()
 	{
-		// pause discord rpc
-		updateRPC(true);
-
 		// pause game
 		paused = true;
 
@@ -1016,21 +1005,6 @@ class PlayState extends MusicBeatState
 		if (canPause && !paused && !Init.trueSettings.get('Auto Pause'))
 			pauseGame();
 		super.onFocusLost();
-	}
-
-	public static function updateRPC(pausedRPC:Bool)
-	{
-		#if DISCORD_RPC
-		var displayRPC:String = (pausedRPC) ? detailsPausedText : songDetails;
-
-		if (health > 0)
-		{
-			if (Conductor.songPosition > 0 && !pausedRPC)
-				Discord.changePresence(displayRPC, detailsSub, iconRPC, true, songLength - Conductor.songPosition);
-			else
-				Discord.changePresence(displayRPC, detailsSub, iconRPC);
-		}
-		#end
 	}
 
 	function popUpScore(baseRating:String, timing:Bool, strumline:Strumline, coolNote:Note)
@@ -1266,9 +1240,6 @@ class PlayState extends MusicBeatState
 			#if desktop
 			// Song duration in a float, useful for the time left feature
 			songLength = songMusic.length;
-
-			// Updating Discord Rich Presence (with Time Left)
-			updateRPC(false);
 			#end
 		}
 	}
@@ -1288,9 +1259,6 @@ class PlayState extends MusicBeatState
 
 		// set details for song stuffs
 		detailsSub = "";
-
-		// Updating Discord Rich Presence.
-		updateRPC(false);
 
 		songMusic = new FlxSound().loadEmbedded(Paths.inst(SONG.song), false, true);
 

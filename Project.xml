@@ -3,14 +3,7 @@
 
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Forever Engine" file="Forever Engine" main="Main" version="1.0.0" company="Yoshubs" />
-
-	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
-		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
-	<app preloader="flixel.system.FlxPreloader" />
-
-	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2-->
-	<set name="SWF_VERSION" value="11.8" />
+	<app title="Rhythmo" file="Rhythmo" main="Main" version="0.0.1" company="Joalor64" />
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
@@ -26,10 +19,6 @@
 	<!--Mobile-specific-->
 	<window if="mobile" orientation="landscape" fullscreen="true" resizable="false" />
 
-	<!-- _____________________________ Custom Defines ____________________________ -->
-	
-	<define name="DISCORD_RPC" if="desktop" unless="web || neko" />
-
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="BUILD_DIR" value="export" />
@@ -39,20 +28,13 @@
 	<source path="source" />
 	<assets path="assets" />
 
-	<assets path="FE-CrashDialog.exe" type="template" if="windows release" />
-
-	<!--<assets path="mods" />-->
-
 	<!-- _______________________________ Libraries ______________________________ -->
-
-	<haxedev set='webgl' if="html5" />
 
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
-
-	<haxelib name="discord_rpc" if="DISCORD_RPC"/>
-	<haxelib name="polymod"/>
+	<haxelib name="polymod-joalor64" />
+	<haxelib name="hxcpp-debug-server" if="desktop debug" />
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
