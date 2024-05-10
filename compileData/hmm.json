@@ -30,6 +30,10 @@
         "type": "haxelib"
       },
       {
+        "name": "hscript",
+        "type": "haxelib"
+      },
+      {
         "name": "polymod-joalor64",
         "type": "git",
         "dir": null,

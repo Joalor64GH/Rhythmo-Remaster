@@ -1,8 +1,7 @@
 package;
 
-import base.*;
-import base.ForeverDependencies;
-import base.dependency.Overlay;
+import ForeverDependencies;
+import Overlay;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxGame;

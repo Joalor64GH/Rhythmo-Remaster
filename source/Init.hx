@@ -1,8 +1,7 @@
-import states.menus.MainMenuState;
-import base.Conductor;
-import base.CoolUtil;
-import base.dependency.Discord;
-import base.dependency.Overlay;
+import MainMenuState;
+import Conductor;
+import CoolUtil;
+import Overlay;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.addons.transition.FlxTransitionableState;
@@ -10,8 +9,6 @@ import flixel.graphics.FlxGraphic;
 import flixel.input.keyboard.FlxKey;
 import openfl.filters.BitmapFilter;
 import openfl.filters.ColorMatrixFilter;
-import states.*;
-import states.charting.*;
 
 using StringTools;
 
