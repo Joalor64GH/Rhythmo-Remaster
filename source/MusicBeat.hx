@@ -34,7 +34,7 @@ class MusicBeatState extends ForeverUIState
 	{
 		// dump
 		Paths.clearStoredMemory();
-		if ((!Std.isOfType(this, states.PlayState)) && (!Std.isOfType(this, states.charting.ChartingState)))
+		if ((!Std.isOfType(this, PlayState)) && (!Std.isOfType(this, ChartingState)))
 			Paths.clearUnusedMemory();
 
 		if (transIn != null)

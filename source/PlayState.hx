@@ -26,7 +26,7 @@ import flixel.math.FlxPoint;
 import flixel.math.FlxRandom;
 import flixel.math.FlxRect;
 import flixel.system.FlxAssets.FlxSoundAsset;
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -114,7 +114,6 @@ class PlayState extends MusicBeatState
 
 	var storyDifficultyText:String = "";
 
-	public static var iconRPC:String = "";
 	public static var songLength:Float = 0;
 
 	private var stageBuild:Stage;
@@ -569,7 +568,7 @@ class PlayState extends MusicBeatState
 
 				deaths += 1;
 
-				openSubState(new states.subState.GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 				FlxG.sound.play(AssetManager.getAsset('fnf_loss_sfx', SOUND, 'sounds/${PlayState.assetModifier}'));
 			}
 
@@ -989,8 +988,6 @@ class PlayState extends MusicBeatState
 
 	override public function onFocus():Void
 	{
-		if (!paused)
-			updateRPC(false);
 		super.onFocus();
 	}
 
@@ -1404,10 +1401,6 @@ class PlayState extends MusicBeatState
 			if ((startTimer != null) && (!startTimer.finished))
 				startTimer.active = true;
 			paused = false;
-
-			///*
-			updateRPC(false);
-			// */
 		}
 
 		super.closeSubState();
@@ -1503,8 +1496,6 @@ class PlayState extends MusicBeatState
 		switch (PlayState.SONG.song.toLowerCase())
 		{
 			default:
-				// why did i name it the same thing bru
-				// this was confusing sorry shubs :sob: @BeastlyGhost
 				if (stageBuild.stageModule.exists(funcToCall))
 					stageBuild.stageModule.get(funcToCall)();
 				else
@@ -1515,7 +1506,6 @@ class PlayState extends MusicBeatState
 						startCountdown();
 				}
 		}
-		//
 	}
 
 	public var displayCountdown:Bool = true;

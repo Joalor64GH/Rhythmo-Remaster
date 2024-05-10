@@ -23,6 +23,8 @@ import sys.FileSystem;
 import sys.io.File;
 import sys.io.Process;
 
+using StringTools;
+
 class Main extends Sprite
 {
 	// class action variables

@@ -197,7 +197,6 @@ class UI extends FlxSpriteGroup
 
 		// update playstate
 		PlayState.detailsSub = scoreBar.text;
-		PlayState.updateRPC(false);
 	}
 
 	public function beatHit()
